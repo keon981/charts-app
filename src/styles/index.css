@@ -1,11 +1,16 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --card-foreground: var(--efai-gray);
   --muted-foreground: var(--efai-gray-dark);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
 }
 
 @theme inline {
@@ -61,11 +66,11 @@
   --color-card-hover: hsl(var(--card-hover));
   --color-card-foreground: hsl(var(--efai-gray));
 
-  --color-chart-1: hsl(var(--chart-1));
-  --color-chart-2: hsl(var(--chart-2));
-  --color-chart-3: hsl(var(--chart-3));
-  --color-chart-4: hsl(var(--chart-4));
-  --color-chart-5: hsl(var(--chart-5));
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
 
   --color-pagination: hsl(var(--pagination));
   --color-pagination-selected: hsl(var(--pagination-selected));
@@ -165,7 +170,7 @@
   .table-cell {
     @apply transition-all duration-200;
   }
-  [data-slot="scroll-area-viewport"] > div {
+  [data-slot='scroll-area-viewport'] > div {
     /* @apply h-full; */
   }
 }

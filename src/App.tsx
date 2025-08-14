@@ -2,7 +2,6 @@ import { createBrowserRouter, RouterProvider } from 'react-router'
 
 import FrontPage from './pages/front/page'
 
-import './styles/App.css'
 
 const router = createBrowserRouter([
   {
