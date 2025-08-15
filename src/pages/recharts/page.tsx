@@ -1,25 +1,25 @@
 import { useState } from 'react'
 
 import { Button } from 'efai-ui-component'
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
+import { ChevronLeft } from 'lucide-react'
+import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 
-import { chartData } from '@/__mocks__/chart-data.mock'
+import ChartAreaDefault from './chart-area-default.card'
+import ChartAreaInteractive from './chart-area-interactive'
+import chartData from '@/__mocks__/chart-data.json'
 import type { ChartConfig } from '@/components/ui/chart'
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 
 const chartConfig = {
   desktop: {
     label: 'Desktop',
-    color: '#2563eb',
+    color: 'var(--color-chart-2)',
   },
   mobile: {
     label: 'Mobile',
-    color: '#60a5fa',
+    color: 'var(--color-chart-5)',
   },
-  month: {
-    label: 'Month',
-  },
-} satisfies ChartConfig
+} satisfies ChartConfig<'desktop' | 'mobile'>
 
 const detailChartConfig = {
   value: {
@@ -29,9 +29,10 @@ const detailChartConfig = {
   name: {
     label: 'Name',
   },
-} satisfies ChartConfig
+} satisfies ChartConfig<'value' | 'name'>
 
-function RechartsPage() {
+// eslint-disable-next-line unused-imports/no-unused-vars
+function DefaultPage() {
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null)
   const [selectedType, setSelectedType] = useState<'desktop' | 'mobile' | null>(null)
   const [showDetailChart, setShowDetailChart] = useState(false)
@@ -100,16 +101,16 @@ function RechartsPage() {
                   />
                   <Bar
                     dataKey="desktop"
-                    fill="var(--color-chart-1)"
                     radius={4}
                     onClick={handleDesktopBarClick}
+                    fill="var(--color-desktop)"
                     style={{ cursor: 'pointer' }}
                   />
                   <Bar
                     dataKey="mobile"
-                    fill="var(--color-chart-2)"
                     radius={4}
                     onClick={handleMobileBarClick}
+                    fill="var(--color-mobile)"
                     style={{ cursor: 'pointer' }}
                   />
                   <ChartTooltip content={<ChartTooltipContent />} />
@@ -126,11 +127,8 @@ function RechartsPage() {
           // 詳細圖表
             <div>
               <div className="flex items-center gap-4 mb-4">
-                <Button
-                  onClick={handleBackToMain}
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                >
-                  ← 返回總覽
+                <Button variant="ghost" onClick={handleBackToMain}>
+                  <ChevronLeft /> 返回總覽
                 </Button>
               </div>
 
@@ -142,10 +140,10 @@ function RechartsPage() {
                     tickMargin={20}
                     axisLine={false}
                   />
-                  <YAxis />
+                  {/* <YAxis /> */}
                   <Bar
                     dataKey="value"
-                    fill={selectedType === 'desktop' ? 'var(--color-chart-1)' : 'var(--color-chart-2)'}
+                    fill={chartConfig[selectedType as keyof typeof chartConfig].color}
                     radius={4}
                   />
                   <ChartTooltip content={<ChartTooltipContent />} />
@@ -158,4 +156,13 @@ function RechartsPage() {
   )
 }
 
+function RechartsPage() {
+  return (
+    <div className="p-4">
+      <ChartAreaInteractive />
+    </div>
+  )
+}
+
+// export default DefaultPage
 export default RechartsPage

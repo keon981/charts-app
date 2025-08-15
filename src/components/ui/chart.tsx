@@ -7,8 +7,8 @@ import { cn } from '@/lib/utils'
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: '', dark: '.dark' } as const
 
-export type ChartConfig = {
-  [k in string]: {
+export type ChartConfig<T extends string> = {
+  [k in T]: {
     label?: React.ReactNode
     icon?: React.ComponentType
   } & (
@@ -18,7 +18,7 @@ export type ChartConfig = {
 }
 
 interface ChartContextProps {
-  config: ChartConfig
+  config: ChartConfig<string>
 }
 
 const ChartContext = createContext<ChartContextProps | null>(null)
@@ -33,14 +33,14 @@ function useChart() {
   return context
 }
 
-function ChartContainer({
+function ChartContainer<T extends string>({
   id,
   className,
   children,
   config,
   ...props
 }: React.ComponentProps<'div'> & {
-  config: ChartConfig
+  config: ChartConfig<T>
   children: React.ComponentProps<
     typeof RechartsPrimitive.ResponsiveContainer
   >['children']
@@ -58,7 +58,7 @@ function ChartContainer({
           '[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-primary/20', // 設定hover時的背景顏色
           '[&_.recharts-cartesian-axis-tick_text]:fill-white', // 設定x和y軸文字顏色
           '[&_.recharts-surface]:outline-hidden [&_.recharts-sector[stroke="#fff"]]:stroke-transparent [&_.recharts-sector]:outline-hidden  [&_.recharts-reference-line_[stroke="#ccc"]]:stroke-border [&_.recharts-dot[stroke="#fff"]]:stroke-transparent [&_.recharts-layer]:outline-hidden ',
-          '[&_.recharts-cartesian-grid_line[stroke="#ccc"]]:stroke-primary', // 設定格線顏色
+          '[&_.recharts-cartesian-grid_line[stroke="#ccc"]]:stroke-border', // 設定格線顏色
           '[&_.recharts-curve.recharts-tooltip-cursor]:stroke-border ', //
           ' [&_.recharts-polar-grid_[stroke="#ccc"]]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted',
           className,
@@ -74,7 +74,7 @@ function ChartContainer({
   )
 }
 
-function ChartStyle({ id, config }: { id: string, config: ChartConfig }) {
+function ChartStyle({ id, config }: { id: string, config: ChartConfig<string> }) {
   const colorConfig = Object.entries(config).filter(
     ([, config]) => config.theme || config.color,
   )
@@ -315,7 +315,7 @@ function ChartLegendContent({
 
 // Helper to extract item config from a payload.
 function getPayloadConfigFromPayload(
-  config: ChartConfig,
+  config: ChartConfig<string>,
   payload: unknown,
   key: string,
 ) {

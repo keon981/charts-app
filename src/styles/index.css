@@ -4,6 +4,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
+  --card: var(--efai-gray-darkest);
   --card-foreground: var(--efai-gray);
   --muted-foreground: var(--efai-gray-dark);
   --chart-1: oklch(0.646 0.222 41.116);
