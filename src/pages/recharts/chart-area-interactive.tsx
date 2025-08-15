@@ -2,14 +2,6 @@
 
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
-import areaChartData from '@/__mocks__/area-chart-data.json'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import type {
   ChartConfig,
 } from '@/components/ui/chart'
@@ -19,6 +11,7 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
+  CharyLegendPayload,
 } from '@/components/ui/chart'
 
 export const description = 'An interactive area chart'
@@ -38,71 +31,83 @@ const chartConfig = {
   },
 } satisfies ChartConfig<'desktop' | 'mobile' | 'total'>
 
-function ChartAreaInteractive() {
-  const filteredData = Object.entries(areaChartData).map((item) => {
-    const [month, data] = item
+interface Props<T extends object> {
+  data: T
+}
+
+function ChartAreaInteractive<T extends object>({ data }: Props<T>) {
+  const filteredData = Object.entries(data).map((item) => {
+    const [month, value] = item
     return {
       month,
-      desktop: data.desktop,
-      mobile: data.mobile,
-      total: data.total,
+      desktop: value.desktop,
+      mobile: value.mobile,
+      total: value.total,
     }
   })
 
-  return (
-    <Card className="pt-0">
-      <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
-        <div className="grid flex-1 gap-1">
-          <CardTitle>Area Chart - Interactive</CardTitle>
-          <CardDescription>
-            Showing total visitors for the last 3 months
-          </CardDescription>
-        </div>
-      </CardHeader>
-      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-auto min-h-[250px] w-full"
-        >
-          <AreaChart data={filteredData}>
+  const handleLegendClick = (dataKey: any) => {
+    if (dataKey && typeof dataKey === 'string') {
+      // 在這裡添加您想要的邏輯
+      // 例如：切換資料顯示、篩選資料等
+      // 可以根據 dataKey 來切換顯示/隱藏對應的資料系列
+    }
+  }
 
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              minTickGap={0}
-              interval={0}
+  return (
+    <ChartContainer
+      config={chartConfig}
+      className="aspect-auto h-[250px] w-full"
+    >
+      <AreaChart data={filteredData}>
+        <CartesianGrid vertical={false} />
+        <XAxis
+          dataKey="month"
+          tickLine={false}
+          axisLine={false}
+          tickMargin={8}
+          minTickGap={0}
+          interval={0}
+
+        />
+        <YAxis tickLine={false} axisLine={false} />
+        <ChartTooltip
+          cursor={false}
+          content={(
+            <ChartTooltipContent indicator="dot" />
+          )}
+        />
+        <Area
+          dataKey="mobile"
+          type="natural"
+          fill="url(#fillMobile)"
+          stroke="var(--color-mobile)"
+          stackId="a"
+        />
+        <Area
+          dataKey="desktop"
+          type="natural"
+          fill="url(#fillDesktop)"
+          stroke="var(--color-desktop)"
+          stackId="b"
+        />
+        <Area
+          dataKey="total"
+          type="natural"
+          fill="url(#fillTotal)"
+          stroke="var(--color-total)"
+          stackId="C"
+        />
+        <ChartLegend
+          content={(
+            <ChartLegendContent renderPayload={payload => (
+              <CharyLegendPayload payload={payload} onClick={() => handleLegendClick(payload.dataKey)} />
+            )}
             />
-            <YAxis tickLine={false} axisLine={false} />
-            <ChartTooltip
-              cursor={false}
-              content={(
-                <ChartTooltipContent
-                  indicator="dot"
-                />
-              )}
-            />
-            <Area
-              dataKey="mobile"
-              type="natural"
-              fill="url(#fillMobile)"
-              stroke="var(--color-mobile)"
-              stackId="a"
-            />
-            <Area
-              dataKey="desktop"
-              type="natural"
-              fill="url(#fillDesktop)"
-              stroke="var(--color-desktop)"
-              stackId="a"
-            />
-            <ChartLegend content={<ChartLegendContent />} />
-          </AreaChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
+          )}
+        />
+      </AreaChart>
+    </ChartContainer>
   )
 }
 

@@ -4,8 +4,7 @@ import { Button } from 'efai-ui-component'
 import { ChevronLeft } from 'lucide-react'
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 
-import ChartAreaDefault from './chart-area-default.card'
-import ChartAreaInteractive from './chart-area-interactive'
+import ChartAreaCard from './chart-area.card'
 import chartData from '@/__mocks__/chart-data.json'
 import type { ChartConfig } from '@/components/ui/chart'
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
@@ -159,7 +158,7 @@ function DefaultPage() {
 function RechartsPage() {
   return (
     <div className="p-4">
-      <ChartAreaInteractive />
+      <ChartAreaCard />
     </div>
   )
 }
