@@ -24,19 +24,20 @@ function ChartBar<T extends object>({ data }: Props<T>) {
       }
     })
   if (!['desktop', 'mobile', 'total'].includes(selectValue ?? '')) {
+    const barConfig: Array<Omit<React.ComponentProps<typeof Bar>, 'ref'>> = selectValue === 'multiple'
+      ? [
+          { dataKey: 'mobile', fill: 'var(--color-mobile)', radius: 4 },
+          { dataKey: 'desktop', fill: 'var(--color-desktop)', radius: 4 },
+        ]
+      : [
+          { dataKey: 'mobile', stackId: 'a', fill: 'var(--color-mobile)', radius: [0, 0, 4, 4] },
+          { dataKey: 'desktop', stackId: 'a', fill: 'var(--color-desktop)', radius: [4, 4, 0, 0] },
+        ]
+
     return (
       <ChartContainer
         key={selectValue}
-        config={{
-          desktop: {
-            label: 'Desktop',
-            color: 'var(--chart-1)',
-          },
-          mobile: {
-            label: 'Mobile',
-            color: 'var(--chart-2)',
-          },
-        }}
+        config={chartConfig}
       >
         <BarChart accessibilityLayer data={filteredData}>
           <CartesianGrid vertical={false} />
@@ -50,18 +51,7 @@ function ChartBar<T extends object>({ data }: Props<T>) {
           <YAxis tickLine={false} axisLine={false} />
           <ChartTooltip content={<ChartTooltipContent hideLabel />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Bar
-            dataKey="desktop"
-            stackId="a"
-            fill="var(--color-desktop)"
-            radius={[0, 0, 4, 4]}
-          />
-          <Bar
-            dataKey="mobile"
-            stackId="a"
-            fill="var(--color-mobile)"
-            radius={[4, 4, 0, 0]}
-          />
+          {barConfig.map(item => (<Bar key={`${item.dataKey}`} {...item} />))}
         </BarChart>
       </ChartContainer>
     )
@@ -93,7 +83,7 @@ function getChartConfig<T extends string>(selectValue: T): ChartConfig<T> {
       return {
         total: {
           label: 'Total',
-          color: 'var(--chart-2)',
+          color: 'var(--chart-5)',
         },
       } as ChartConfig<T>
     case 'desktop':
@@ -107,7 +97,7 @@ function getChartConfig<T extends string>(selectValue: T): ChartConfig<T> {
       return {
         mobile: {
           label: 'Mobile',
-          color: 'var(--chart-5)',
+          color: 'var(--chart-2)',
         },
       } as ChartConfig<T>
     default:

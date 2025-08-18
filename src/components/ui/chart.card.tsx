@@ -64,14 +64,15 @@ function ChartCard({
               {description}
             </Card.Description>
           </div>
+          {/* Select */}
           <Card.Action className="flex gap-1.5">
             <SelectRoot
               onValueChange={contextValue.onSelect}
               value={contextValue.selectValue}
               defaultValue={defaultSelectValue ?? undefined}
             >
-              <SelectTrigger>
-                <SelectValue placeholder="Select" />
+              <SelectTrigger className="data-[placeholder]:text-gray-400">
+                <SelectValue placeholder="Select..." />
               </SelectTrigger>
               <SelectContent>
                 <ActionList data={actions ?? []} />
