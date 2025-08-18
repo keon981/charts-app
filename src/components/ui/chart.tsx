@@ -274,7 +274,7 @@ function useChartLegendContent() {
 interface ChartLegendContentProps extends ChartLegendContextProps,
   Pick<RechartsPrimitive.LegendProps, 'payload' | 'verticalAlign'>,
   React.ComponentProps<'div'> {
-  renderPayload?: (item: Payload) => React.ReactNode
+  renderPayload?: (item: Payload, index: number) => React.ReactNode
 }
 
 function ChartLegendContent({
@@ -299,8 +299,8 @@ function ChartLegendContent({
         )}
         {...props}
       >
-        {payload.map((item) => {
-          if (renderPayload) return renderPayload(item)
+        {payload.map((item, index) => {
+          if (renderPayload) return renderPayload(item, index)
           return <CharyLegendPayload key={item.value} payload={item} />
         })}
       </div>

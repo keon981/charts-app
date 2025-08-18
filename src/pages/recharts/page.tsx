@@ -4,10 +4,13 @@ import { Button } from 'efai-ui-component'
 import { ChevronLeft } from 'lucide-react'
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 
-import ChartAreaCard from './chart-area.card'
+import type { LineIndicatorType } from './chart-line-multiple'
+import ChartLineMultiple from './chart-line-multiple'
+import areaChartData from '@/__mocks__/area-chart-data.json'
 import chartData from '@/__mocks__/chart-data.json'
 import type { ChartConfig } from '@/components/ui/chart'
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
+import ChartCard from '@/components/ui/chart.card'
 
 const chartConfig = {
   desktop: {
@@ -156,9 +159,21 @@ function DefaultPage() {
 }
 
 function RechartsPage() {
+  const [lineIndicator, setLineIndicator] = useState<LineIndicatorType>(null)
   return (
     <div className="p-4">
-      <ChartAreaCard />
+      {/* Line Chart */}
+      <ChartCard
+        header="Line Chart - Multiple"
+        description="January - December, 2024"
+        actions={['dots', 'label', 'custom dots'].map(item => ({
+          key: item,
+          children: item.charAt(0).toUpperCase() + item.slice(1),
+          onClick: () => setLineIndicator(item as LineIndicatorType),
+        }))}
+      >
+        <ChartLineMultiple data={areaChartData} indicator={lineIndicator} />
+      </ChartCard>
     </div>
   )
 }
