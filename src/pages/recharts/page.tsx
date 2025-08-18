@@ -6,7 +6,7 @@ import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 
 import ChartBar from './chart-bar'
 import ChartLineMultiple from './chart-line-multiple'
-import ChartPieLabel from './pie-chart'
+import PieChart from './pie-chart'
 import areaChartData from '@/__mocks__/area-chart-data.json'
 import chartData from '@/__mocks__/chart-data.json'
 import type { ChartConfig } from '@/components/ui/chart'
@@ -182,8 +182,10 @@ function RechartsPage() {
       <ChartCard
         header="Pie Chart - Label"
         description="January - December, 2024"
+        actions={['total', 'desktop', 'mobile']}
+        defaultSelectValue="total"
       >
-        <ChartPieLabel data={areaChartData} />
+        <PieChart data={areaChartData} />
       </ChartCard>
     </div>
   )

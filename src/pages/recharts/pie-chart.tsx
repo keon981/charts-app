@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+
 import { Pie, PieChart } from 'recharts'
 
 import type {
@@ -11,10 +13,18 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-  CharyLegendPayload,
 } from '@/components/ui/chart'
+import { useChartCard } from '@/components/ui/chart.card'
 
 export const description = 'A pie chart with a label'
+
+interface MonthChartData {
+  month: string
+  desktop: number
+  mobile: number
+  total: number
+  fill: string
+}
 
 interface Props<T extends object> {
   data: T
@@ -71,8 +81,10 @@ const chartConfig = {
   },
 } satisfies ChartConfig<MonthType>
 
-function ChartPieLabel<T extends object>({ data }: Props<T>) {
-  const chartData = Object
+function PieChartDefault<T extends object>({ data }: Props<T>) {
+  const [focusMonth, setFocusMonth] = useState<MonthType | null>(null)
+  const { selectValue, onSelect } = useChartCard()
+  const chartData: Array<MonthChartData> = Object
     .entries(data)
     .map((item) => {
       const [month, value] = item
@@ -86,6 +98,48 @@ function ChartPieLabel<T extends object>({ data }: Props<T>) {
       }
     })
 
+  const handlePieClick = (data: any) => {
+    setFocusMonth(data.payload.month)
+    onSelect?.('')
+  }
+
+  useEffect(() => {
+    if (selectValue) {
+      setFocusMonth(null)
+    }
+  }, [selectValue])
+
+  if (focusMonth) {
+    const monthData = chartData.find(item => item.month === focusMonth) ?? {} as MonthChartData
+    return (
+      <ChartPieFocus data={monthData} />
+    )
+  }
+
+  if (selectValue === 'desktop') {
+    return (
+      <ChartPieLabel data={chartData} dataKey="desktop" onPieClick={handlePieClick} />
+    )
+  }
+  if (selectValue === 'mobile') {
+    return (
+      <ChartPieLabel data={chartData} dataKey="mobile" onPieClick={handlePieClick} />
+    )
+  }
+
+  return (
+    <ChartPieLabel data={chartData} dataKey="total" onPieClick={handlePieClick} />
+  )
+}
+
+// Change Select Item(total, desktop, mobile)
+function ChartPieLabel({ data, dataKey, onPieClick }: {
+  data: MonthChartData[]
+  dataKey: string
+  onPieClick?: (data: any, index: number, e: React.MouseEvent) => void
+}) {
+  const [isLabel, setIsLabel] = useState(false)
+
   return (
     <ChartContainer
       config={chartConfig}
@@ -93,21 +147,17 @@ function ChartPieLabel<T extends object>({ data }: Props<T>) {
     >
       <PieChart>
         <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-        <Pie data={chartData} dataKey="total" label nameKey="month" />
+        <Pie
+          data={data}
+          dataKey={dataKey ?? 'total'}
+          label={isLabel}
+          nameKey="month"
+          onAnimationStart={() => setIsLabel(false)}
+          onAnimationEnd={() => setIsLabel(true)}
+          onClick={onPieClick}
+        />
         <ChartLegend
-          content={(
-            <ChartLegendContent
-              nameKey="month"
-              renderPayload={(payload, index) => (
-                <CharyLegendPayload
-                  key={index}
-                  payload={payload}
-                  // onClick={() => handleLegendClick(payload.dataKey)}
-                  className="px-2 py-1 rounded hover:bg-white/20 "
-                />
-              )}
-            />
-          )}
+          content={(<ChartLegendContent nameKey="month" />)}
           className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
         />
       </PieChart>
@@ -115,4 +165,45 @@ function ChartPieLabel<T extends object>({ data }: Props<T>) {
   )
 }
 
-export default ChartPieLabel
+// Focus Month Item
+function ChartPieFocus({ data }: Props<MonthChartData>) {
+  const [isLabel, setIsLabel] = useState(false)
+  const chartData = [
+    { name: 'desktop', value: data.desktop, fill: 'var(--chart-1)' },
+    { name: 'mobile', value: data.mobile, fill: 'var(--chart-2)' },
+  ]
+
+  return (
+    <ChartContainer
+      config={{
+        desktop: {
+          label: 'Desktop',
+          color: 'var(--chart-1)',
+        },
+        mobile: {
+          label: 'Mobile',
+          color: 'var(--chart-2)',
+        },
+      }}
+      className="[&_.recharts-pie-label-text]:fill-foreground mx-auto aspect-square max-h-[400px] pb-0"
+    >
+      <PieChart>
+        <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+        <Pie
+          data={chartData}
+          dataKey="value"
+          label={isLabel}
+          nameKey="name"
+          onAnimationStart={() => setIsLabel(false)}
+          onAnimationEnd={() => setIsLabel(true)}
+        />
+        <ChartLegend
+          content={(<ChartLegendContent nameKey="name" />)}
+          className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
+        />
+      </PieChart>
+    </ChartContainer>
+  )
+}
+
+export default PieChartDefault
