@@ -14,6 +14,7 @@ import {
   ChartTooltipContent,
   CharyLegendPayload,
 } from '@/components/ui/chart'
+import { useChartCard } from '@/components/ui/chart.card'
 
 export const description = 'An interactive area chart'
 
@@ -44,17 +45,24 @@ interface Props<T extends object> {
 type LineProps = Omit<React.ComponentProps<typeof Line>, 'ref'>
 
 function ChartLineMultiple<T extends object>({ data, indicator }: Props<T>) {
-  const filteredData = Object.entries(data).map((item) => {
-    const [month, value] = item
-    return {
-      month,
-      desktop: value.desktop,
-      mobile: value.mobile,
-      total: value.total,
-    }
-  })
+  const { selectValue } = useChartCard()
+  console.log('selectValue', selectValue)
+
+  const filteredData = Object
+    .entries(data)
+    .map((item) => {
+      const [month, value] = item
+      return {
+        month: month.slice(0, 3),
+        desktop: value.desktop,
+        mobile: value.mobile,
+        total: value.total,
+      }
+    })
 
   const handleLegendClick = (dataKey: any) => {
+    console.log('dataKey', dataKey)
+
     if (dataKey && typeof dataKey === 'string') {
       // 在這裡添加您想要的邏輯
       // 例如：切換資料顯示、篩選資料等
@@ -82,7 +90,6 @@ function ChartLineMultiple<T extends object>({ data, indicator }: Props<T>) {
           tickLine={false}
           axisLine={false}
           tickMargin={8}
-          minTickGap={0}
           interval={0}
 
         />
@@ -115,6 +122,7 @@ function ChartLineMultiple<T extends object>({ data, indicator }: Props<T>) {
                   key={index}
                   payload={payload}
                   onClick={() => handleLegendClick(payload.dataKey)}
+                  className="px-2 py-1 rounded hover:bg-white/20 "
                 />
               )}
             />

@@ -4,7 +4,7 @@ import { Button } from 'efai-ui-component'
 import { ChevronLeft } from 'lucide-react'
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 
-import type { LineIndicatorType } from './chart-line-multiple'
+import ChartBar from './chart-bar'
 import ChartLineMultiple from './chart-line-multiple'
 import areaChartData from '@/__mocks__/area-chart-data.json'
 import chartData from '@/__mocks__/chart-data.json'
@@ -33,7 +33,6 @@ const detailChartConfig = {
   },
 } satisfies ChartConfig<'value' | 'name'>
 
-// eslint-disable-next-line unused-imports/no-unused-vars
 function DefaultPage() {
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null)
   const [selectedType, setSelectedType] = useState<'desktop' | 'mobile' | null>(null)
@@ -159,20 +158,25 @@ function DefaultPage() {
 }
 
 function RechartsPage() {
-  const [lineIndicator, setLineIndicator] = useState<LineIndicatorType>(null)
   return (
-    <div className="p-4">
+    <div className="p-4 grid 2xl:grid-cols-3 grid-cols-2 gap-4">
       {/* Line Chart */}
       <ChartCard
         header="Line Chart - Multiple"
         description="January - December, 2024"
         actions={['dots', 'label', 'custom dots'].map(item => ({
           key: item,
-          children: item.charAt(0).toUpperCase() + item.slice(1),
-          onClick: () => setLineIndicator(item as LineIndicatorType),
+          value: item,
         }))}
       >
-        <ChartLineMultiple data={areaChartData} indicator={lineIndicator} />
+        <ChartLineMultiple data={areaChartData} />
+      </ChartCard>
+      {/* Bar Chart */}
+      <ChartCard
+        header="Bar Chart - Stacked"
+        description="January - December, 2024"
+      >
+        <ChartBar data={areaChartData} />
       </ChartCard>
     </div>
   )

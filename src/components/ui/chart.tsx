@@ -310,6 +310,7 @@ function ChartLegendContent({
 
 function CharyLegendPayload({
   payload,
+  className,
   ...props
 }: React.ComponentProps<'div'> & {
   payload: Payload
@@ -323,6 +324,7 @@ function CharyLegendPayload({
     <div
       className={cn(
         'flex items-center gap-1.5 [&>svg]:size-3 [&>svg]:text-muted-foreground ',
+        className,
       )}
       {...props}
     >
