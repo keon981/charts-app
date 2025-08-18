@@ -1,22 +1,17 @@
-import React from 'react'
-
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
 import type { ChartConfig } from '@/components/ui/chart'
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
+import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
+import { useChartCard } from '@/components/ui/chart.card'
 
 interface Props<T extends object> {
   data: T
 }
 
-const chartConfig = {
-  total: {
-    label: 'Total',
-    color: 'var(--chart-2)',
-  },
-} satisfies ChartConfig<'total'>
-
 function ChartBar<T extends object>({ data }: Props<T>) {
+  const { selectValue } = useChartCard()
+  const chartConfig = getChartConfig(selectValue ?? 'all')
+
   const filteredData = Object
     .entries(data)
     .map((item) => {
@@ -28,9 +23,52 @@ function ChartBar<T extends object>({ data }: Props<T>) {
         total: value.total,
       }
     })
+  if (!['desktop', 'mobile', 'total'].includes(selectValue ?? '')) {
+    return (
+      <ChartContainer
+        key={selectValue}
+        config={{
+          desktop: {
+            label: 'Desktop',
+            color: 'var(--chart-1)',
+          },
+          mobile: {
+            label: 'Mobile',
+            color: 'var(--chart-2)',
+          },
+        }}
+      >
+        <BarChart accessibilityLayer data={filteredData}>
+          <CartesianGrid vertical={false} />
+          <XAxis
+            dataKey="month"
+            tickLine={false}
+            tickMargin={10}
+            axisLine={false}
+            tickFormatter={value => value.slice(0, 3)}
+          />
+          <YAxis tickLine={false} axisLine={false} />
+          <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+          <ChartLegend content={<ChartLegendContent />} />
+          <Bar
+            dataKey="desktop"
+            stackId="a"
+            fill="var(--color-desktop)"
+            radius={[0, 0, 4, 4]}
+          />
+          <Bar
+            dataKey="mobile"
+            stackId="a"
+            fill="var(--color-mobile)"
+            radius={[4, 4, 0, 0]}
+          />
+        </BarChart>
+      </ChartContainer>
+    )
+  }
 
   return (
-    <ChartContainer config={chartConfig}>
+    <ChartContainer key={selectValue} config={chartConfig}>
       <BarChart accessibilityLayer data={filteredData}>
         <CartesianGrid vertical={false} />
         <XAxis
@@ -40,14 +78,50 @@ function ChartBar<T extends object>({ data }: Props<T>) {
           axisLine={false}
           tickFormatter={value => value.slice(0, 3)}
         />
-        <ChartTooltip
-          cursor={false}
-          content={<ChartTooltipContent hideLabel />}
-        />
-        <Bar dataKey="total" fill="var(--color-total)" radius={8} />
+        <YAxis tickLine={false} axisLine={false} />
+        <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+        <ChartLegend content={<ChartLegendContent />} />
+        <Bar dataKey={selectValue ?? 'total'} fill={`var(--color-${selectValue})`} radius={8} />
       </BarChart>
     </ChartContainer>
   )
+}
+
+function getChartConfig<T extends string>(selectValue: T): ChartConfig<T> {
+  switch (selectValue) {
+    case 'total':
+      return {
+        total: {
+          label: 'Total',
+          color: 'var(--chart-2)',
+        },
+      } as ChartConfig<T>
+    case 'desktop':
+      return {
+        desktop: {
+          label: 'Desktop',
+          color: 'var(--chart-1)',
+        },
+      } as ChartConfig<T>
+    case 'mobile':
+      return {
+        mobile: {
+          label: 'Mobile',
+          color: 'var(--chart-5)',
+        },
+      } as ChartConfig<T>
+    default:
+      return {
+        desktop: {
+          label: 'Desktop',
+          color: 'var(--chart-1)',
+        },
+        mobile: {
+          label: 'Mobile',
+          color: 'var(--chart-2)',
+        },
+      } as ChartConfig<T>
+  }
 }
 
 export default ChartBar

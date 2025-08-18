@@ -164,10 +164,7 @@ function RechartsPage() {
       <ChartCard
         header="Line Chart - Multiple"
         description="January - December, 2024"
-        actions={['dots', 'label', 'custom dots'].map(item => ({
-          key: item,
-          value: item,
-        }))}
+        actions={['dots', 'label', 'custom dots']}
       >
         <ChartLineMultiple data={areaChartData} />
       </ChartCard>
@@ -175,6 +172,8 @@ function RechartsPage() {
       <ChartCard
         header="Bar Chart - Stacked"
         description="January - December, 2024"
+        actions={['all', 'total', 'desktop', 'mobile']}
+        defaultSelectValue="all"
       >
         <ChartBar data={areaChartData} />
       </ChartCard>

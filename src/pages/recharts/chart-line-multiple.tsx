@@ -1,5 +1,7 @@
 'use client'
 
+import { useMemo } from 'react'
+
 import { Drama, GitCommitVertical } from 'lucide-react'
 import { CartesianGrid, LabelList, Line, LineChart, XAxis, YAxis } from 'recharts'
 
@@ -46,7 +48,7 @@ type LineProps = Omit<React.ComponentProps<typeof Line>, 'ref'>
 
 function ChartLineMultiple<T extends object>({ data, indicator }: Props<T>) {
   const { selectValue } = useChartCard()
-  console.log('selectValue', selectValue)
+  const selectValueMemo = useMemo(() => indicator ?? selectValue, [selectValue])
 
   const filteredData = Object
     .entries(data)
@@ -101,7 +103,7 @@ function ChartLineMultiple<T extends object>({ data, indicator }: Props<T>) {
           )}
         />
         {['mobile', 'desktop', 'total'].map((item) => {
-          const lineProps = indicator ? indicatorSetting(indicator, item) : {}
+          const lineProps = selectValueMemo ? indicatorSetting(selectValueMemo as LineIndicatorType, item) : {}
           return (
             <Line
               key={item}
