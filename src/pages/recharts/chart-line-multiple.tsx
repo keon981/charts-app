@@ -55,7 +55,6 @@ function ChartLineMultiple<T extends object>({ data, indicator }: Props<T>) {
   const { selectValue, setPage, page, setDescription } = useChartCard()
   const [dayData, setDayData] = useState([])
   const selectValueMemo = useMemo(() => indicator ?? selectValue, [selectValue])
-  console.log(selectValueMemo)
 
   const monthKeys = Object.keys(data)
   const filteredData = Object
