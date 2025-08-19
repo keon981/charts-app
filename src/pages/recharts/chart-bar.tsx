@@ -5,6 +5,7 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import type { ChartConfig } from '@/components/ui/chart'
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { useChartCard } from '@/components/ui/chart.card'
+import { filterDateData } from '@/lib/utils'
 
 interface Props<T extends object> {
   data: T
@@ -26,9 +27,10 @@ interface BarContentProps<T extends object> extends Props<T> {
 
 function ChartBar<T extends object>({ data }: Props<T>) {
   const [dayData, setDayData] = useState([])
-  const { selectValue, page, setPage } = useChartCard()
+  const { selectValue, page, setPage, setDescription } = useChartCard()
   const chartConfig = getChartConfig(selectValue ?? 'all')
 
+  const monthKeys = Object.keys(data)
   const filterMonthData: Array<MonthData> = Object
     .entries(data)
     .map((item) => {
@@ -43,31 +45,20 @@ function ChartBar<T extends object>({ data }: Props<T>) {
 
   // handlers
   const handleBarClick = (barData: any) => {
-    const barMonth = barData.month
-
-    const filterDayData = Object
-      .entries(data)
-      .find((item) => {
-        const [month] = item
-        return month.slice(0, 3) === barMonth
-      })?.[1]
-
-    const dataData = filterDayData.data.map((item: any) => ({
-      ...item,
-      total: item.desktop + item.mobile,
-    }))
-
-    setDayData(dataData)
+    const activeLabel = barData.month
+    const dateData = filterDateData(data, activeLabel)
+    const description = monthKeys.find(v => v.slice(0, 3) === activeLabel)
+    setDescription(`${description ?? ''}, 2024`)
+    setDayData(dateData)
     setPage(2)
   }
 
   if (page === 2) {
     return (
-      <BarContent
+      <BarContainer
         data={dayData}
         dataKey="date"
         config={chartConfig}
-        barProps={{ onClick: handleBarClick }}
         xAxisProps={{
           tickFormatter: (value) => {
             const date = new Date(value)
@@ -82,7 +73,7 @@ function ChartBar<T extends object>({ data }: Props<T>) {
   }
 
   return (
-    <BarContent
+    <BarContainer
       data={filterMonthData}
       dataKey="month"
       config={chartConfig}
@@ -91,7 +82,7 @@ function ChartBar<T extends object>({ data }: Props<T>) {
   )
 }
 
-function BarContent<T extends Array<any>>({ barProps, ...props }: Omit<BarContentProps<T>, 'children'> & {
+function BarContainer<T extends Array<any>>({ barProps, ...props }: Omit<BarContentProps<T>, 'children'> & {
   barProps?: Omit<React.ComponentProps<typeof Bar>, 'ref' | 'dataKey'>
 }) {
   const { selectValue } = useChartCard()
@@ -109,20 +100,20 @@ function BarContent<T extends Array<any>>({ barProps, ...props }: Omit<BarConten
         ]
 
     return (
-      <BarContainer key={selectValue} {...props}>
+      <BarContent key={selectValue} {...props}>
         {barConfig.map(item => (<Bar key={`${item.dataKey}`} {...barProps} {...item} />))}
-      </BarContainer>
+      </BarContent>
     )
   }
 
   return (
-    <BarContainer {...props}>
+    <BarContent {...props}>
       <Bar dataKey={selectValue ?? 'total'} fill={`var(--color-${selectValue})`} radius={4} {...barProps} />
-    </BarContainer>
+    </BarContent>
   )
 }
 
-function BarContainer<T extends Array<any>>({ data, dataKey, config, children, xAxisProps }: BarContentProps<T>) {
+function BarContent<T extends Array<object>>({ data, dataKey, config, children, xAxisProps }: BarContentProps<T>) {
   return (
     <ChartContainer config={config}>
       <BarChart accessibilityLayer data={data}>

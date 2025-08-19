@@ -18,6 +18,7 @@ interface ChartCardContextProps {
   onSelect: (value: string) => void
   page: number
   setPage: (page: number) => void
+  setDescription: (value: string) => void
 }
 const ChartCardContext = createContext<ChartCardContextProps | null>(null)
 
@@ -36,7 +37,6 @@ function ChartCard({
   children,
   classNames,
   header,
-  description,
   footer,
   actions,
   onSelect,
@@ -44,6 +44,7 @@ function ChartCard({
   defaultSelectValue,
   ...props
 }: Props) {
+  const [description, setDescription] = useState('January - December, 2024')
   const [selectValueState, setSelectValueState] = useState<string | null>(null)
   const [page, setPage] = useState(1)
 
@@ -51,13 +52,20 @@ function ChartCard({
     setSelectValueState(value)
     onSelect?.(value)
   }
-  const value = selectValue ?? selectValueState
+  const _value = selectValue ?? selectValueState
+
+  const handleBack = () => {
+    setPage(1)
+    setDescription('January - December, 2024')
+  }
+
   const contextValue = useMemo(() => ({
-    selectValue: value ?? null,
+    selectValue: _value ?? null,
     onSelect: handleSelect,
     page,
     setPage,
-  }), [onSelect, selectValue, selectValueState, page, setPage])
+    setDescription,
+  }), [onSelect, selectValue, selectValueState, page, setPage, setDescription])
 
   return (
     <ChartCardContext value={contextValue}>
@@ -65,7 +73,7 @@ function ChartCard({
         <Card.Header className={cn('gap-2 pt-6 border-b', classNames?.header)}>
           <Flex items="start" className="gap-2">
             {page > 1 && (
-              <Button variant="ghost" theme="gray" className="size-6 p-0" onClick={() => setPage(1)}>
+              <Button variant="ghost" theme="gray" className="size-6 p-0" onClick={handleBack}>
                 <ChevronLeft className="" />
               </Button>
             )}

@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: '', dark: '.dark' } as const
 
-export type ChartConfig<T extends string> = {
+type ChartConfig<T extends string> = {
   [k in T]: {
     label?: React.ReactNode
     icon?: React.ComponentType
@@ -16,6 +16,22 @@ export type ChartConfig<T extends string> = {
     | { color?: string, theme?: never }
     | { color?: never, theme: Record<keyof typeof THEMES, string> }
   )
+}
+
+type OmitComponent<
+  T extends React.ElementType,
+  K = never,
+> = Omit<
+  React.ComponentProps<T>,
+  'ref' | (K extends PropertyKey ? K : never)
+>
+interface ChartContentProps<T extends string, P extends object[]> {
+  config: ChartConfig<T>
+  data: P
+  xAxisProps?: OmitComponent<typeof RechartsPrimitive.XAxis>
+  yAxisProps?: OmitComponent<typeof RechartsPrimitive.YAxis>
+  chartTooltipProps?: OmitComponent<typeof ChartTooltip>
+  lineChartProps?: OmitComponent<typeof RechartsPrimitive.LineChart>
 }
 
 interface ChartContextProps {
@@ -57,7 +73,7 @@ function ChartContainer<T extends string>({
         data-chart={chartId}
         className={cn(
           'flex aspect-video justify-center text-xs',
-          '[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-primary/20', // 設定hover時的背景顏色
+          '[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-primary/30', // 設定hover時的背景顏色
           '[&_.recharts-cartesian-axis-tick_text]:fill-white', // 設定x和y軸文字顏色
           '[&_.recharts-surface]:outline-hidden [&_.recharts-sector[stroke="#fff"]]:stroke-transparent [&_.recharts-sector]:outline-hidden  [&_.recharts-reference-line_[stroke="#ccc"]]:stroke-border [&_.recharts-dot[stroke="#fff"]]:stroke-transparent [&_.recharts-layer]:outline-hidden ',
           '[&_.recharts-cartesian-grid_line[stroke="#ccc"]]:stroke-border', // 設定格線顏色
@@ -388,3 +404,5 @@ export {
   ChartTooltipContent,
   CharyLegendPayload,
 }
+
+export type { ChartConfig, ChartContentProps }

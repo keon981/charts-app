@@ -83,7 +83,9 @@ const chartConfig = {
 
 function PieChartDefault<T extends object>({ data }: Props<T>) {
   const [focusMonth, setFocusMonth] = useState<MonthType | null>(null)
-  const { selectValue, page, setPage } = useChartCard()
+  const { selectValue, page, setPage, setDescription } = useChartCard()
+
+  const monthKeys = Object.keys(data)
   const chartData: Array<MonthChartData> = Object
     .entries(data)
     .map((item) => {
@@ -99,7 +101,10 @@ function PieChartDefault<T extends object>({ data }: Props<T>) {
     })
 
   const handlePieClick = (data: any) => {
-    setFocusMonth(data.payload.month)
+    const activeLabel = data.payload.month
+
+    setDescription(`${activeLabel}, 2024`)
+    setFocusMonth(activeLabel)
     setPage(2)
   }
 
