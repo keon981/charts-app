@@ -1,7 +1,8 @@
 import { createContext, use, useMemo, useState } from 'react'
 
-import { cn, SelectContent, SelectItem, SelectRoot, SelectTrigger, SelectValue } from 'efai-ui-component'
+import { Button, cn, Flex, SelectContent, SelectItem, SelectRoot, SelectTrigger, SelectValue } from 'efai-ui-component'
 import { upperFirst } from 'lodash-es'
+import { ChevronLeft } from 'lucide-react'
 
 import Card from '@/components/ui/card'
 
@@ -13,8 +14,10 @@ interface Props extends Omit<React.ComponentProps<typeof Card>, 'onSelect'> {
 }
 
 interface ChartCardContextProps {
-  selectValue?: string | null
-  onSelect?: (value: string) => void
+  selectValue: string | null
+  onSelect: (value: string) => void
+  page: number
+  setPage: (page: number) => void
 }
 const ChartCardContext = createContext<ChartCardContextProps | null>(null)
 
@@ -42,33 +45,44 @@ function ChartCard({
   ...props
 }: Props) {
   const [selectValueState, setSelectValueState] = useState<string | null>(null)
+  const [page, setPage] = useState(1)
+
   const handleSelect = (value: string) => {
     setSelectValueState(value)
     onSelect?.(value)
   }
   const value = selectValue ?? selectValueState
   const contextValue = useMemo(() => ({
-    selectValue: value ?? undefined,
+    selectValue: value ?? null,
     onSelect: handleSelect,
-  }), [onSelect, selectValue, selectValueState])
+    page,
+    setPage,
+  }), [onSelect, selectValue, selectValueState, page, setPage])
 
   return (
     <ChartCardContext value={contextValue}>
       <Card className={cn(className, classNames?.root)} {...props}>
         <Card.Header className={cn('gap-2 pt-6 border-b', classNames?.header)}>
-          <div className="grid gap-1">
-            <Card.Title className={cn(classNames?.title)}>
-              {header ?? 'Chart Card'}
-            </Card.Title>
-            <Card.Description>
-              {description}
-            </Card.Description>
-          </div>
+          <Flex items="start" className="gap-2">
+            {page > 1 && (
+              <Button variant="ghost" theme="gray" className="size-6 p-0" onClick={() => setPage(1)}>
+                <ChevronLeft className="" />
+              </Button>
+            )}
+            <div className="grid gap-1">
+              <Card.Title className={cn(classNames?.title)}>
+                {header ?? 'Chart Card'}
+              </Card.Title>
+              <Card.Description>
+                {description}
+              </Card.Description>
+            </div>
+          </Flex>
           {/* Select */}
           <Card.Action className="flex gap-1.5">
             <SelectRoot
               onValueChange={contextValue.onSelect}
-              value={contextValue.selectValue}
+              value={contextValue.selectValue ?? undefined}
               defaultValue={defaultSelectValue ?? undefined}
             >
               <SelectTrigger className="data-[placeholder]:text-gray-400">

@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
 import type { ChartConfig } from '@/components/ui/chart'
@@ -8,11 +10,26 @@ interface Props<T extends object> {
   data: T
 }
 
+interface MonthData {
+  month: string
+  desktop: number
+  mobile: number
+  total: number
+}
+
+interface BarContentProps<T extends object> extends Props<T> {
+  dataKey: string
+  config: ChartConfig<string>
+  children: React.ReactNode
+  xAxisProps?: Omit<React.ComponentProps<typeof XAxis>, 'ref'>
+}
+
 function ChartBar<T extends object>({ data }: Props<T>) {
-  const { selectValue } = useChartCard()
+  const [dayData, setDayData] = useState([])
+  const { selectValue, page, setPage } = useChartCard()
   const chartConfig = getChartConfig(selectValue ?? 'all')
 
-  const filteredData = Object
+  const filterMonthData: Array<MonthData> = Object
     .entries(data)
     .map((item) => {
       const [month, value] = item
@@ -23,6 +40,63 @@ function ChartBar<T extends object>({ data }: Props<T>) {
         total: value.total,
       }
     })
+
+  // handlers
+  const handleBarClick = (barData: any) => {
+    const barMonth = barData.month
+
+    const filterDayData = Object
+      .entries(data)
+      .find((item) => {
+        const [month] = item
+        return month.slice(0, 3) === barMonth
+      })?.[1]
+
+    const dataData = filterDayData.data.map((item: any) => ({
+      ...item,
+      total: item.desktop + item.mobile,
+    }))
+
+    setDayData(dataData)
+    setPage(2)
+  }
+
+  if (page === 2) {
+    return (
+      <BarContent
+        data={dayData}
+        dataKey="date"
+        config={chartConfig}
+        barProps={{ onClick: handleBarClick }}
+        xAxisProps={{
+          tickFormatter: (value) => {
+            const date = new Date(value)
+            return date.toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+            })
+          },
+        }}
+      />
+    )
+  }
+
+  return (
+    <BarContent
+      data={filterMonthData}
+      dataKey="month"
+      config={chartConfig}
+      barProps={{ onClick: handleBarClick }}
+    />
+  )
+}
+
+function BarContent<T extends Array<any>>({ barProps, ...props }: Omit<BarContentProps<T>, 'children'> & {
+  barProps?: Omit<React.ComponentProps<typeof Bar>, 'ref' | 'dataKey'>
+}) {
+  const { selectValue } = useChartCard()
+
+  // all | multiple
   if (!['desktop', 'mobile', 'total'].includes(selectValue ?? '')) {
     const barConfig: Array<Omit<React.ComponentProps<typeof Bar>, 'ref'>> = selectValue === 'multiple'
       ? [
@@ -35,43 +109,36 @@ function ChartBar<T extends object>({ data }: Props<T>) {
         ]
 
     return (
-      <ChartContainer
-        key={selectValue}
-        config={chartConfig}
-      >
-        <BarChart accessibilityLayer data={filteredData}>
-          <CartesianGrid vertical={false} />
-          <XAxis
-            dataKey="month"
-            tickLine={false}
-            tickMargin={10}
-            axisLine={false}
-            tickFormatter={value => value.slice(0, 3)}
-          />
-          <YAxis tickLine={false} axisLine={false} />
-          <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-          <ChartLegend content={<ChartLegendContent />} />
-          {barConfig.map(item => (<Bar key={`${item.dataKey}`} {...item} />))}
-        </BarChart>
-      </ChartContainer>
+      <BarContainer key={selectValue} {...props}>
+        {barConfig.map(item => (<Bar key={`${item.dataKey}`} {...barProps} {...item} />))}
+      </BarContainer>
     )
   }
 
   return (
-    <ChartContainer key={selectValue} config={chartConfig}>
-      <BarChart accessibilityLayer data={filteredData}>
+    <BarContainer {...props}>
+      <Bar dataKey={selectValue ?? 'total'} fill={`var(--color-${selectValue})`} radius={4} {...barProps} />
+    </BarContainer>
+  )
+}
+
+function BarContainer<T extends Array<any>>({ data, dataKey, config, children, xAxisProps }: BarContentProps<T>) {
+  return (
+    <ChartContainer config={config}>
+      <BarChart accessibilityLayer data={data}>
         <CartesianGrid vertical={false} />
         <XAxis
-          dataKey="month"
+          dataKey={dataKey}
           tickLine={false}
-          tickMargin={10}
           axisLine={false}
+          tickMargin={10}
           tickFormatter={value => value.slice(0, 3)}
+          {...xAxisProps}
         />
         <YAxis tickLine={false} axisLine={false} />
         <ChartTooltip content={<ChartTooltipContent hideLabel />} />
         <ChartLegend content={<ChartLegendContent />} />
-        <Bar dataKey={selectValue ?? 'total'} fill={`var(--color-${selectValue})`} radius={8} />
+        {children}
       </BarChart>
     </ChartContainer>
   )
