@@ -1,13 +1,39 @@
-# React + TypeScript + Vite@6 template
+# Charts App - Full Stack Learning Project
 
-> This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> 一個使用 React + TypeScript + Vite 前端和 Python FastAPI 後端的圖表應用程式，用於學習全端開發。
 
 - [中文版](./docs/README.zh-TW.md)
+- [Python 學習路徑](./docs/python-learns.md)
+
+## 專案結構
+
+```
+charts-app/
+├── frontend/                 # React + Vite 前端應用
+│   ├── src/                 # 前端源碼
+│   ├── public/              # 靜態資源
+│   └── package.json         # 前端依賴
+├── backend/                 # Python FastAPI 後端
+│   ├── app/                 # 後端應用
+│   │   ├── main.py         # FastAPI 入口
+│   │   ├── api/            # API 路由
+│   │   ├── models/         # 數據模型
+│   │   └── data/           # Mock 數據
+│   └── requirements.txt    # Python 依賴
+└── docs/                   # 文檔
+    ├── README.zh-TW.md     # 中文說明
+    └── python-learns.md    # Python 學習路徑
+```
 
 ## Requirements
 
+### 前端
 * NodeJS v20+
 * pnpm v9+
+
+### 後端
+* Python 3.8+
+* pip 或 pipenv
 
 ## Overview
 
@@ -36,34 +62,51 @@
 
 ## Getting Started
 
-1. Getting started is a simple as cloning the repository
-   ```
-   git clone git@github.com:keon981/vite-tsx-app.git
+### 前端開發
 
+1. 進入前端目錄
+   ```bash
+   cd frontend
    ```
-2. Changing into the new directory
-   ```
-   cd vite-tsx-app
-   ```
-3. Installing dependencies
-   ```
+
+2. 安裝依賴
+   ```bash
    pnpm install
    ```
-4. Removing the .git folder (and any additional files, folders or dependencies you may not need)
-   ```
-   rm -rf .git
+
+3. 啟動開發伺服器
+   ```bash
+   pnpm dev
    ```
 
-Congrats! You're ready to starting working on that new project!
+### 後端開發
 
-> If you'd rather run the commands above in one go, check out the command below：
->
-> ```
-> git clone git@github.com:keon981/vite-tsx-app.git &&\
-> cd vite-tsx-app &&\
-> pnpm install &&\
-> rm -rf .git
-> ```
+1. 進入後端目錄
+   ```bash
+   cd backend
+   ```
+
+2. 創建虛擬環境
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # Linux/Mac
+   # 或
+   venv\Scripts\activate     # Windows
+   ```
+
+3. 安裝依賴
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. 啟動 FastAPI 伺服器
+   ```bash
+   uvicorn app.main:app --reload
+   ```
+
+### 學習路徑
+
+請參考 [Python 學習路徑文檔](./docs/python-learns.md) 來逐步學習 FastAPI 後端開發。
 
 ## Testing
 
