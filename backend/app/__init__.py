@@ -1,1 +1,0 @@
-# FastAPI Charts Backend Application
