@@ -1,20 +1,29 @@
-import ChartBar from './chart-bar'
-import ChartLineMultiple from './chart-line-multiple'
-import PieChart from './pie-chart'
+// import ChartBar from './chart-bar'
+// import ChartLineMultiple from './chart-line-multiple'
+// import PieChart from './pie-chart'
+import ChartLineMultipleDays from './chart-line-multiple/days'
 import chartData from '@/__mocks__/chart-data.json'
 import ChartCard from '@/components/ui/chart.card'
 
 function RechartsPage() {
   return (
-    <div className="max-w-full p-4 grid 2xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-4 ">
+    <div className="max-w-full p-4 grid grid-cols-1 gap-4 ">
+
+      {/* Line Days Chart */}
+      <ChartCard
+        header="Line Chart Days - Multiple"
+        actions={['dots', 'label', 'custom dots']}
+      >
+        <ChartLineMultipleDays data={chartData} />
+      </ChartCard>
 
       {/* Line Chart */}
-      <ChartCard
+      {/* <ChartCard
         header="Line Chart - Multiple"
         actions={['dots', 'label', 'custom dots']}
       >
         <ChartLineMultiple data={chartData} />
-      </ChartCard>
+      </ChartCard> */}
 
       {/* Bar Chart */}
       {/* <ChartCard

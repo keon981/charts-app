@@ -108,9 +108,6 @@ function ChartLineMultiple<T extends object>({ data, indicator }: Props<T>) {
       selectValue={selectValueMemo}
       config={chartConfig}
       data={filteredData}
-      lineChartProps={{
-        onClick: handleLineChartClick,
-      }}
     />
   )
 }
