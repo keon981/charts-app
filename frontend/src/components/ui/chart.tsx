@@ -25,6 +25,7 @@ type OmitComponent<
   React.ComponentProps<T>,
   'ref' | (K extends PropertyKey ? K : never)
 >
+
 interface ChartContentProps<T extends string, P extends object[]> {
   config: ChartConfig<T>
   data: P
@@ -73,11 +74,10 @@ function ChartContainer<T extends string>({
         data-chart={chartId}
         className={cn(
           'flex aspect-video justify-center text-xs',
-          '[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-primary/30', // 設定hover時的背景顏色
           '[&_.recharts-cartesian-axis-tick_text]:fill-white', // 設定x和y軸文字顏色
           '[&_.recharts-surface]:outline-hidden [&_.recharts-sector[stroke="#fff"]]:stroke-transparent [&_.recharts-sector]:outline-hidden  [&_.recharts-reference-line_[stroke="#ccc"]]:stroke-border [&_.recharts-dot[stroke="#fff"]]:stroke-transparent [&_.recharts-layer]:outline-hidden ',
           '[&_.recharts-cartesian-grid_line[stroke="#ccc"]]:stroke-border', // 設定格線顏色
-          '[&_.recharts-curve.recharts-tooltip-cursor]:stroke-border ', //
+          '[&_.recharts-curve.recharts-tooltip-cursor]:stroke-primary/70 [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-primary/30', // 設定hover時的tooltip背景顏色
           ' [&_.recharts-polar-grid_[stroke="#ccc"]]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted',
           className,
         )}
@@ -405,4 +405,4 @@ export {
   CharyLegendPayload,
 }
 
-export type { ChartConfig, ChartContentProps }
+export type { ChartConfig, ChartContentProps, OmitComponent }

@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 
 import { Drama } from 'lucide-react'
 import type { Line } from 'recharts'
+import type { CategoricalChartFunc } from 'recharts/types/chart/generateCategoricalChart'
 
 import LineChartContent from './content'
 import type {
@@ -33,13 +34,24 @@ const chartConfig = {
 
 type LineIndicatorType = 'dots' | 'label' | 'custom dots' | 'custom label' | null
 
+type DomainType = 'auto' | number
+type MinType = 'dataMin' | DomainType
+type MaxType = 'dataMax' | DomainType
+
 interface Props<T extends object> {
   data: T
   indicator?: LineIndicatorType
+  allowDataOverflow?: boolean
+  domain: [MinType, MaxType]
 }
 type LineProps = Omit<React.ComponentProps<typeof Line>, 'ref'>
 
-function ChartLineMultipleDays<T extends object>({ data, indicator }: Props<T>) {
+function ChartLineMultipleDays<T extends object>({
+  data,
+  indicator,
+  domain,
+  allowDataOverflow = false,
+}: Props<T>) {
   const { selectValue } = useChartCard()
   const selectValueMemo = useMemo(() => indicator ?? selectValue, [selectValue])
 
@@ -50,6 +62,10 @@ function ChartLineMultipleDays<T extends object>({ data, indicator }: Props<T>) 
       return dates
     })
 
+  const handleLineChartClick: CategoricalChartFunc = (state) => {
+    // console.log(state)
+  }
+
   return (
     <LineChartContent
       selectValue={selectValueMemo}
@@ -58,10 +74,30 @@ function ChartLineMultipleDays<T extends object>({ data, indicator }: Props<T>) 
       xAxisProps={{
         dataKey: 'date',
         hide: true,
+        onClick(data, index, event) {
+          event.stopPropagation()
+          event.preventDefault()
+          console.log(data, index, event)
+        },
+      }}
+      yAxisProps={{
+        type: 'number',
+        domain,
+        allowDataOverflow, // 避免被美化
+        yAxisId: 'left',
+      }}
+      lineChartProps={{
+        onClick: handleLineChartClick,
+      }}
+      chartTooltipProps={{
+        cursor: { strokeWidth: 2 },
+      }}
+      lineProps={{
+        yAxisId: 'left',
       }}
     />
   )
 }
 
 export default ChartLineMultipleDays
-export type { LineIndicatorType, LineProps }
+export type { LineIndicatorType, LineProps, MaxType, MinType }

@@ -13,14 +13,16 @@ import {
 } from '@/components/ui/chart'
 import type {
   ChartContentProps,
+  OmitComponent,
 } from '@/components/ui/chart'
 
 type LineIndicatorType = 'dots' | 'label' | 'custom dots' | 'custom label' | null
 
-type LineProps = Omit<React.ComponentProps<typeof Line>, 'ref'>
+type LineProps = OmitComponent<typeof Line>
 
 interface LineChartContentProps<T extends string, P extends object[]> extends ChartContentProps<T, P> {
   selectValue: string | null
+  lineProps?: LineProps
 }
 
 const defaultLines = ['mobile', 'desktop', 'total']
@@ -29,11 +31,15 @@ function LineChartContent<T extends string, P extends object[]>({
   config,
   data,
   lineChartProps,
+  chartTooltipProps,
   selectValue,
   xAxisProps,
+  yAxisProps,
+  lineProps,
 }: LineChartContentProps<T, P>) {
   const [legendLines, setLegendLines] = useState(defaultLines)
 
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const handleLegendClick = (dataKey: any) => {
     if (!dataKey && typeof dataKey !== 'string') return
 
@@ -44,6 +50,7 @@ function LineChartContent<T extends string, P extends object[]>({
       return [...prev, dataKey]
     })
   }
+
   return (
     <ChartContainer
       config={config}
@@ -68,15 +75,16 @@ function LineChartContent<T extends string, P extends object[]>({
           interval={0}
           {...xAxisProps}
         />
-        <YAxis tickLine={false} axisLine={false} />
+        <YAxis tickLine={false} axisLine={false} allowDecimals={false} {...yAxisProps} />
         <ChartTooltip
           cursor={false}
           content={(
             <ChartTooltipContent indicator="dot" />
           )}
+          {...chartTooltipProps}
         />
         {defaultLines.map((item) => {
-          const lineProps = selectValue ? indicatorSetting(selectValue as LineIndicatorType, item) : {}
+          const itemLineProps = selectValue ? indicatorSetting(selectValue as LineIndicatorType, item) : {}
 
           return (
             <Line
@@ -89,11 +97,12 @@ function LineChartContent<T extends string, P extends object[]>({
               dot={false}
               hide={!legendLines.includes(item)}
               {...lineProps}
+              {...itemLineProps}
             />
           )
         })}
 
-        <ChartLegend
+        {/* <ChartLegend
           content={(
             <ChartLegendContent
               renderPayload={(payload, index) => (
@@ -107,7 +116,7 @@ function LineChartContent<T extends string, P extends object[]>({
               )}
             />
           )}
-        />
+        /> */}
       </LineChart>
     </ChartContainer>
   )
@@ -139,7 +148,7 @@ function indicatorSetting(indicator: LineIndicatorType, dataKey: string): LinePr
           const r = 24
           return (
             <GitCommitVertical
-              key={payload.month}
+              key={payload?.month | payload?.date}
               x={cx - r / 2}
               y={cy - r / 2}
               width={r}
