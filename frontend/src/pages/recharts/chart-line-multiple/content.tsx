@@ -1,15 +1,12 @@
 import { useState } from 'react'
 
 import { GitCommitVertical } from 'lucide-react'
-import { CartesianGrid, LabelList, Line, LineChart, XAxis, YAxis } from 'recharts'
+import { CartesianGrid, ComposedChart, LabelList, Line, LineChart, XAxis, YAxis } from 'recharts'
 
 import {
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-  CharyLegendPayload,
 } from '@/components/ui/chart'
 import type {
   ChartContentProps,
@@ -23,9 +20,15 @@ type LineProps = OmitComponent<typeof Line>
 interface LineChartContentProps<T extends string, P extends object[]> extends ChartContentProps<T, P> {
   selectValue: string | null
   lineProps?: LineProps
+  defaultLines?: string[]
+  children?: React.ReactNode
 }
 
-const defaultLines = ['mobile', 'desktop', 'total']
+const _defaultLines = [
+  'mobile',
+  // 'desktop',
+  // 'total',
+]
 
 function LineChartContent<T extends string, P extends object[]>({
   config,
@@ -35,7 +38,9 @@ function LineChartContent<T extends string, P extends object[]>({
   selectValue,
   xAxisProps,
   yAxisProps,
+  defaultLines = _defaultLines,
   lineProps,
+  children,
 }: LineChartContentProps<T, P>) {
   const [legendLines, setLegendLines] = useState(defaultLines)
 
@@ -56,7 +61,7 @@ function LineChartContent<T extends string, P extends object[]>({
       config={config}
       className="aspect-auto h-[250px] w-full"
     >
-      <LineChart
+      <ComposedChart
         accessibilityLayer
         data={data}
         margin={{
@@ -68,13 +73,14 @@ function LineChartContent<T extends string, P extends object[]>({
       >
         <CartesianGrid vertical={false} />
         <XAxis
-          dataKey="month"
+          dataKey="date"
           tickLine={false}
           axisLine={false}
           tickMargin={8}
           interval={0}
           {...xAxisProps}
         />
+        {children}
         <YAxis tickLine={false} axisLine={false} allowDecimals={false} {...yAxisProps} />
         <ChartTooltip
           cursor={false}
@@ -101,7 +107,6 @@ function LineChartContent<T extends string, P extends object[]>({
             />
           )
         })}
-
         {/* <ChartLegend
           content={(
             <ChartLegendContent
@@ -117,7 +122,7 @@ function LineChartContent<T extends string, P extends object[]>({
             />
           )}
         /> */}
-      </LineChart>
+      </ComposedChart>
     </ChartContainer>
   )
 }
