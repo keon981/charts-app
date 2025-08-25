@@ -1,23 +1,33 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { PaginationContent, PaginationItem, PaginationNav } from 'efai-ui-component'
-import { Outlet, useNavigate } from 'react-router'
+import { Outlet, useLocation, useNavigate } from 'react-router'
+
+enum PageLabelENUM {
+  RECHARTS = 'Recharts (SVG)',
+  CHARTS = 'ChartJS (Canvas)',
+}
 
 interface PageRouter {
   router: string
-  label: 'Recharts' | 'ChartsJS'
+  label: PageLabelENUM
 }
 
 const pageRouter: PageRouter[] = [{
   router: '/',
-  label: 'Recharts',
+  label: PageLabelENUM.RECHARTS,
 }, {
   router: '/chart',
-  label: 'ChartsJS',
+  label: PageLabelENUM.CHARTS,
 }]
 
 function PaginationTabs() {
-  const [page, setPage] = useState<'Recharts' | 'ChartsJS'>('Recharts')
+  const location = useLocation()
+  const [page, setPage] = useState<PageLabelENUM>(
+    location.pathname === '/'
+      ? PageLabelENUM.RECHARTS
+      : PageLabelENUM.CHARTS,
+  )
   const navigate = useNavigate()
 
   const handlePageChange = (page: PageRouter) => {
@@ -27,7 +37,7 @@ function PaginationTabs() {
 
   return (
     <>
-      {/* <PaginationNav className="absolute top-6 justify-center">
+      <PaginationNav className="py-4 mb-4 justify-center">
         <PaginationContent className="px-4 py-2 bg-accent-foreground/50 rounded-full">
           {pageRouter.map(item => (
             <PaginationItem
@@ -42,7 +52,7 @@ function PaginationTabs() {
             </PaginationItem>
           ))}
         </PaginationContent>
-      </PaginationNav> */}
+      </PaginationNav>
       <Outlet />
     </>
   )
