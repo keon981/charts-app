@@ -171,6 +171,11 @@
 }
 
 @layer components {
+  #root {
+    position: relative;
+    width: auto;
+    height: auto;
+  }
   .tabs-trigger {
     @apply data-[state=active]:text-white data-[state=active]:bg-transparent;
   }
