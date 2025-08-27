@@ -107,8 +107,8 @@ function ChartLineMultipleDays<T extends object>({
     .values(data)
     .flatMap((item) => {
       const dates = item.data.map(i => ({
-        ...i,
         ...area,
+        ...i,
         total: i.desktop + i.mobile,
       }))
       return dates
@@ -118,6 +118,10 @@ function ChartLineMultipleDays<T extends object>({
     console.log(state)
   }
 
+  const dayIndexMap = new Map<string, number>(
+    filteredData.map((d, i) => [d.date, i + 1]),
+  )
+
   return (
     <LineChartContent
       selectValue={selectValueMemo}
@@ -125,7 +129,11 @@ function ChartLineMultipleDays<T extends object>({
       data={filteredData}
       xAxisProps={{
         dataKey: 'date',
-        hide: true,
+        // angle: -45,
+        interval: 4,
+        tickMargin: 32,
+        padding: { left: 2, right: 2 },
+        tickFormatter: value => dayIndexMap.get(value as string),
       }}
       yAxisProps={{
         type: 'number',

@@ -65,9 +65,10 @@ function LineChartContent<T extends string, P extends object[]>({
         accessibilityLayer
         data={data}
         margin={{
-          top: 20,
+          top: 8,
           left: 12,
           right: 12,
+          bottom: 48,
         }}
         {...lineChartProps}
       >
@@ -77,7 +78,7 @@ function LineChartContent<T extends string, P extends object[]>({
           tickLine={false}
           axisLine={false}
           tickMargin={8}
-          interval={0}
+          tick={{ stroke: 'var(--color-gray-dark)' }}
           {...xAxisProps}
         />
         {children}

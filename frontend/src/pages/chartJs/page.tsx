@@ -1,4 +1,4 @@
-import React from 'react'
+import { useMemo } from 'react'
 
 import {
   CategoryScale,
@@ -10,6 +10,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js'
+import annotationPlugin from 'chartjs-plugin-annotation'
 import { Line } from 'react-chartjs-2'
 
 import chartData from '@/__mocks__/chart-data.json'
@@ -28,28 +29,25 @@ ChartJS.register(
 interface Props {}
 
 function ChartJsPage(props: Props) {
-  const datesChartData = Object.values(chartData).flatMap(
-    (item) => {
-      const dates = item.data.map(i => ({
-        ...i,
-        // ...area,
-        total: i.desktop + i.mobile,
-      }))
-      return dates
-    },
-  )
+  const datesChartData = useMemo(() => {
+    return Object.values(chartData).flatMap(item =>
+      item.data.map(i => ({ ...i, total: i.desktop + i.mobile })),
+    )
+  }, [])
 
-  const data = {
+  const data = useMemo(() => ({
     labels: datesChartData.map(i => i.date),
     datasets: [
       {
+        fill: true,
         label: '',
         data: datesChartData.map(i => i.mobile),
         borderColor: 'oklch(0.6 0.118 184.704)',
-        backgroundColor: 'rgba(229, 6, 6, 0)',
+        backgroundColor: 'rgba(229, 6, 6, .5)',
+        pointRadius: 0,
       },
     ],
-  }
+  }), [datesChartData])
 
   return (
     <div className="min-h-[250px]">
@@ -57,14 +55,16 @@ function ChartJsPage(props: Props) {
         data={data}
         options={{
           responsive: true,
+          scales: {
+            y: { min: 0, max: 550 },
+          },
           plugins: {
             legend: { display: false },
-            tooltip: {
-              mode: 'index', // index: 同 x 軸顯示多組 dataset
-              intersect: false, // 是否一定要滑到點上才顯示
-            },
+            tooltip: { mode: 'index' as const, intersect: false },
           },
         }}
+        plugins={[annotationPlugin]}
+        redraw
       />
     </div>
   )
