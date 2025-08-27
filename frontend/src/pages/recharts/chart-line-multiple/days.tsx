@@ -133,7 +133,7 @@ function ChartLineMultipleDays<T extends object>({
         interval: 4,
         tickMargin: 32,
         padding: { left: 2, right: 2 },
-        tickFormatter: value => dayIndexMap.get(value as string),
+        tickFormatter: value => `${dayIndexMap.get(value)}`,
       }}
       yAxisProps={{
         type: 'number',
