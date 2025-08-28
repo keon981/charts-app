@@ -1,10 +1,19 @@
 from pathlib import Path
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from app import data
 import json
 
 app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get('/')
 async def main():
@@ -12,10 +21,9 @@ async def main():
     "message": "Hello World from Backend!!"
   }
 
-
 @app.get('/items/{id}')
 async def read_item(
-  id: str, needy: str, q: str | None = None ,short: bool = False
+  id: str, needy: str, q: str | None = None , short: bool = False
 ):
   item = {"item_id": id, "needy": needy}
   if q:

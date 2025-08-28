@@ -7,8 +7,8 @@ import { Checkbox, Flex, Input, Label, Separator } from 'efai-ui-component'
 import type { AxisDomainItem } from 'recharts/types/util/types'
 
 import ChartLineMultipleDays from './chart-line-multiple/days'
-import chartData from '@/__mocks__/chart-data.json'
 import ChartCard from '@/components/ui/chart.card'
+import { useChartQuery } from '@/serve'
 
 type DomainTuple = [AxisDomainItem, AxisDomainItem]
 
@@ -36,8 +36,14 @@ function RechartsPage() {
   const [spacing, setSpacing] = useState<number | null>(null)
   const [domain, dispatchDomain] = useReducer(domainReducer, ['auto', 'auto'])
 
+  // api
+  const { data: chartData, isLoading, isError, error } = useChartQuery()
+
   const setMinNum = (payload: AxisDomainItem) => dispatchDomain({ type: 'min', payload })
   const setMaxNum = (payload: AxisDomainItem) => dispatchDomain({ type: 'max', payload })
+
+  if (isLoading) return <div>loading...</div>
+  if (isError) return <div>錯誤: {error?.message}</div>
 
   return (
     <div className="max-w-full p-4 grid grid-cols-1 gap-4 ">

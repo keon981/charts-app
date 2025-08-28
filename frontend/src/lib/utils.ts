@@ -21,3 +21,8 @@ export function filterDateData<T extends object>(data: T, activeLabel: string = 
 
   return dateData ?? []
 }
+
+export const timeUtils = {
+  minute: 60 * 1000,
+  hour: 60 * 60 * 1000,
+}
