@@ -6,6 +6,13 @@ import { Outlet, useLocation, useNavigate } from 'react-router'
 enum PageLabelENUM {
   RECHARTS = 'Recharts (SVG)',
   CHARTS = 'ChartJS (Canvas)',
+  DOSE = 'Dose (SVG)',
+}
+
+const pageRouterMap: Record<string, PageLabelENUM> = {
+  '/': PageLabelENUM.RECHARTS,
+  '/chart': PageLabelENUM.CHARTS,
+  '/dose': PageLabelENUM.DOSE,
 }
 
 interface PageRouter {
@@ -13,21 +20,25 @@ interface PageRouter {
   label: PageLabelENUM
 }
 
-const pageRouter: PageRouter[] = [{
-  router: '/',
-  label: PageLabelENUM.RECHARTS,
-}, {
-  router: '/chart',
-  label: PageLabelENUM.CHARTS,
-}]
+const pageRouter: PageRouter[] = [
+  {
+    router: '/',
+    label: PageLabelENUM.RECHARTS,
+  },
+  {
+    router: '/chart',
+    label: PageLabelENUM.CHARTS,
+  },
+  {
+    router: '/dose',
+    label: PageLabelENUM.DOSE,
+  },
+]
 
 function PaginationTabs() {
   const location = useLocation()
-  const [page, setPage] = useState<PageLabelENUM>(
-    location.pathname === '/'
-      ? PageLabelENUM.RECHARTS
-      : PageLabelENUM.CHARTS,
-  )
+  const _page = pageRouterMap[location.pathname] ?? PageLabelENUM.RECHARTS
+  const [page, setPage] = useState<PageLabelENUM>(_page)
   const navigate = useNavigate()
 
   const handlePageChange = (page: PageRouter) => {

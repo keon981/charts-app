@@ -1,0 +1,414 @@
+{
+  "series": [
+    {
+      "name": "series_1",
+      "data": [
+        {
+          "dose": 0,
+          "volume": 97.99
+        },
+        {
+          "dose": 0.25,
+          "volume": 97.99
+        },
+        {
+          "dose": 0.5,
+          "volume": 97.99
+        },
+        {
+          "dose": 0.75,
+          "volume": 98.12
+        },
+        {
+          "dose": 1,
+          "volume": 74.12
+        },
+        {
+          "dose": 1.25,
+          "volume": 37.94
+        },
+        {
+          "dose": 1.5,
+          "volume": 13.82
+        },
+        {
+          "dose": 1.75,
+          "volume": 4.27
+        },
+        {
+          "dose": 2,
+          "volume": 2.01
+        }
+      ]
+    },
+    {
+      "name": "series_2",
+      "data": [
+        {
+          "dose": 0,
+          "volume": 97.99
+        },
+        {
+          "dose": 0.25,
+          "volume": 97.99
+        },
+        {
+          "dose": 0.5,
+          "volume": 97.99
+        },
+        {
+          "dose": 0.75,
+          "volume": 97.99
+        },
+        {
+          "dose": 1,
+          "volume": 97.99
+        },
+        {
+          "dose": 1.25,
+          "volume": 98.12
+        },
+        {
+          "dose": 1.5,
+          "volume": 98.12
+        },
+        {
+          "dose": 1.75,
+          "volume": 98.12
+        },
+        {
+          "dose": 2,
+          "volume": 1.76
+        }
+      ]
+    },
+    {
+      "name": "series_3",
+      "data": [
+        {
+          "dose": 0,
+          "volume": 97.99
+        },
+        {
+          "dose": 0.25,
+          "volume": 97.99
+        },
+        {
+          "dose": 0.5,
+          "volume": 97.99
+        },
+        {
+          "dose": 0.75,
+          "volume": 93.72
+        },
+        {
+          "dose": 1,
+          "volume": 3.52
+        },
+        {
+          "dose": 1.25,
+          "volume": 2.51
+        },
+        {
+          "dose": 1.5,
+          "volume": 2.51
+        },
+        {
+          "dose": 1.75,
+          "volume": 1.76
+        },
+        {
+          "dose": 2,
+          "volume": 1.76
+        }
+      ]
+    },
+    {
+      "name": "series_4",
+      "data": [
+        {
+          "dose": 0,
+          "volume": 98.24
+        },
+        {
+          "dose": 0.25,
+          "volume": 98.12
+        },
+        {
+          "dose": 0.5,
+          "volume": 56.28
+        },
+        {
+          "dose": 0.75,
+          "volume": 6.91
+        },
+        {
+          "dose": 1,
+          "volume": 2.89
+        },
+        {
+          "dose": 1.25,
+          "volume": 2.26
+        },
+        {
+          "dose": 1.5,
+          "volume": 2.01
+        },
+        {
+          "dose": 1.75,
+          "volume": 1.76
+        },
+        {
+          "dose": 2,
+          "volume": 1.76
+        }
+      ]
+    },
+    {
+      "name": "series_5",
+      "data": [
+        {
+          "dose": 0,
+          "volume": 40.45
+        },
+        {
+          "dose": 0.25,
+          "volume": 19.47
+        },
+        {
+          "dose": 0.5,
+          "volume": 12.06
+        },
+        {
+          "dose": 0.75,
+          "volume": 87.19
+        },
+        {
+          "dose": 1,
+          "volume": 57.54
+        },
+        {
+          "dose": 1.25,
+          "volume": 24.12
+        },
+        {
+          "dose": 1.5,
+          "volume": 6.03
+        },
+        {
+          "dose": 1.75,
+          "volume": 2.01
+        },
+        {
+          "dose": 2,
+          "volume": 2.01
+        }
+      ]
+    },
+    {
+      "name": "series_6",
+      "data": [
+        {
+          "dose": 0,
+          "volume": 82.54
+        },
+        {
+          "dose": 0.25,
+          "volume": 94.47
+        },
+        {
+          "dose": 0.5,
+          "volume": 59.42
+        },
+        {
+          "dose": 0.75,
+          "volume": 91.71
+        },
+        {
+          "dose": 1,
+          "volume": 97.74
+        },
+        {
+          "dose": 1.25,
+          "volume": 2.26
+        },
+        {
+          "dose": 1.5,
+          "volume": 11.56
+        },
+        {
+          "dose": 1.75,
+          "volume": 5.03
+        },
+        {
+          "dose": 2,
+          "volume": 2.01
+        }
+      ]
+    },
+    {
+      "name": "series_7",
+      "data": [
+        {
+          "dose": 0,
+          "volume": 97.99
+        },
+        {
+          "dose": 0.25,
+          "volume": 97.99
+        },
+        {
+          "dose": 0.5,
+          "volume": 97.99
+        },
+        {
+          "dose": 0.75,
+          "volume": 98.12
+        },
+        {
+          "dose": 1,
+          "volume": 93.47
+        },
+        {
+          "dose": 1.25,
+          "volume": 79.15
+        },
+        {
+          "dose": 1.5,
+          "volume": 58.92
+        },
+        {
+          "dose": 1.75,
+          "volume": 38.19
+        },
+        {
+          "dose": 2,
+          "volume": 3.52
+        }
+      ]
+    },
+    {
+      "name": "series_8",
+      "data": [
+        {
+          "dose": 0,
+          "volume": 98.24
+        },
+        {
+          "dose": 0.25,
+          "volume": 98.24
+        },
+        {
+          "dose": 0.5,
+          "volume": 98.24
+        },
+        {
+          "dose": 0.75,
+          "volume": 98.24
+        },
+        {
+          "dose": 1,
+          "volume": 98.24
+        },
+        {
+          "dose": 1.25,
+          "volume": 63.32
+        },
+        {
+          "dose": 1.5,
+          "volume": 29.15
+        },
+        {
+          "dose": 1.75,
+          "volume": 7.54
+        },
+        {
+          "dose": 2,
+          "volume": 2.51
+        }
+      ]
+    },
+    {
+      "name": "series_9",
+      "data": [
+        {
+          "dose": 0,
+          "volume": 98.37
+        },
+        {
+          "dose": 0.25,
+          "volume": 54.77
+        },
+        {
+          "dose": 0.5,
+          "volume": 91.71
+        },
+        {
+          "dose": 0.75,
+          "volume": 92.59
+        },
+        {
+          "dose": 1,
+          "volume": 3.27
+        },
+        {
+          "dose": 1.25,
+          "volume": 2.26
+        },
+        {
+          "dose": 1.5,
+          "volume": 2.01
+        },
+        {
+          "dose": 1.75,
+          "volume": 21.23
+        },
+        {
+          "dose": 2,
+          "volume": 1.63
+        }
+      ]
+    },
+    {
+      "name": "series_10",
+      "data": [
+        {
+          "dose": 0,
+          "volume": 98.24
+        },
+        {
+          "dose": 0.25,
+          "volume": 98.24
+        },
+        {
+          "dose": 0.5,
+          "volume": 98.24
+        },
+        {
+          "dose": 0.75,
+          "volume": 98.24
+        },
+        {
+          "dose": 1,
+          "volume": 98.24
+        },
+        {
+          "dose": 1.25,
+          "volume": 64.07
+        },
+        {
+          "dose": 1.5,
+          "volume": 28.64
+        },
+        {
+          "dose": 1.75,
+          "volume": 3.27
+        },
+        {
+          "dose": 2,
+          "volume": 3.02
+        }
+      ]
+    }
+  ]
+}

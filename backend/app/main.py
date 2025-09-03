@@ -30,9 +30,16 @@ async def read_item(
     item.update({"q": q})
   return item
 
-@app.get('/data')
+@app.get('/marketing')
 async def get_data():
   file_path = Path(__file__).parent / 'data.json'
+  with open(file_path, 'r', encoding='utf-8') as f:
+    data = json.load(f)
+  return data
+
+@app.get('/dose')
+async def get_data_by_month():
+  file_path = Path(__file__).parent / 'dose_volume_extracted.json'
   with open(file_path, 'r', encoding='utf-8') as f:
     data = json.load(f)
   return data
