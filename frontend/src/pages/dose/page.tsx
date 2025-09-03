@@ -14,6 +14,7 @@ import {
   YAxis,
 } from 'recharts'
 
+import ChartCard from '@/components/ui/chart.card'
 import { apiBase, baseOptions } from '@/serve/useChartQuery'
 
 interface Props {}
@@ -88,45 +89,49 @@ function DoseChart({ times }: { times: number }) {
   return (
     <div className="w-[560px] h-[360px]">
       <h3 className="text-xl font-bold mb-2">Times: {times}</h3>
-      <ResponsiveContainer width="100%" height={450}>
-        <LineChart
-          margin={{ top: 8, right: 16, bottom: 8, left: 0 }}
-          syncId="anyId"
-          data={seriesData}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            dataKey="dose"
-            tickFormatter={v => Number(v).toFixed(2)}
-            label={{ value: 'Dose (Gy)', position: 'insideBottom' }}
-          />
-          <YAxis
-            type="number"
-            dataKey="volume"
-            domain={[0, 100]}
-            tickFormatter={v => `${v}%`}
-            label={{ value: 'Volume (%)', position: 'insideLeft' }}
-          />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend />
-          {series.map((s: any) => (
-            <Line
-              key={s.name}
-              type="monotone"
-              name={s.name}
-              dataKey={s.name}
-              stroke={colorMap.get(s.name)}
+      {/* Line Days Chart */}
+      <ChartCard
+        header="Line Chart Days - Multiple"
+        classNames={{
+          selectTrigger: 'hidden',
+        }}
+      >
+        <ResponsiveContainer width="100%" height={450}>
+          <LineChart
+            margin={{ top: 8, right: 16, bottom: 8, left: 0 }}
+            syncId="anyId"
+            data={seriesData}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis              dataKey="dose"            />
+            <YAxis
+              type="number"
+              dataKey="volume"
+              domain={[0, 100]}
+              tickFormatter={v => `${v}%`}
+              label={{ value: 'Volume (%)', position: 'insideLeft' }}
             />
-          ))}
-          <Brush />
-          {/* <Line
+            <Tooltip content={<CustomTooltip />} />
+            {series.map((s: any) => (
+              <Line
+                key={s.name}
+                type="monotone"
+                name={s.name}
+                strokeWidth={4}
+                dataKey={s.name}
+                stroke={colorMap.get(s.name)}
+              />
+            ))}
+            <Brush />
+            {/* <Line
             type="monotone"
             dataKey="volume"
             stroke="red"
             dot={false}
           /> */}
-        </LineChart>
-      </ResponsiveContainer>
+          </LineChart>
+        </ResponsiveContainer>
+      </ChartCard>
     </div>
   )
 }

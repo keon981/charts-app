@@ -10,6 +10,9 @@ interface Props extends Omit<React.ComponentProps<typeof Card>, 'onSelect'> {
   actions?: Array<React.ComponentProps<typeof SelectItem>> | Array<string>
   selectValue?: string | null
   defaultSelectValue?: string | null
+  classNames?: React.ComponentProps<typeof Card>['classNames'] & {
+    selectTrigger?: string
+  }
   onSelect?: (value: string) => void
 }
 
@@ -93,7 +96,7 @@ function ChartCard({
               value={contextValue.selectValue ?? undefined}
               defaultValue={defaultSelectValue ?? undefined}
             >
-              <SelectTrigger className="data-[placeholder]:text-gray-400">
+              <SelectTrigger className={cn('data-[placeholder]:text-gray-400', classNames?.selectTrigger)}>
                 <SelectValue placeholder="Select..." />
               </SelectTrigger>
               <SelectContent>
